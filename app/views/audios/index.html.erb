@@ -20,7 +20,6 @@
     <% @audios.each do |audio| %>
       <tr>
         <td><%= audio.interest_id %></td>
-        <td><%= audio.audio_url %></td>
         <td><%= audio.name %></td>
         <td><%= audio.description %></td>
         <td><%= audio.air_date %></td>
@@ -28,6 +27,7 @@
         <td><%= link_to 'Show', audio %></td>
         <td><%= link_to 'Edit', edit_audio_path(audio) %></td>
         <td><%= link_to 'Destroy', audio, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        
       </tr>
     <% end %>
   </tbody>

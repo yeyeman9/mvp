@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   # root 'welcome#index'
 
  root to: 'layouts#index'
+ 
+  get '/stream/:id', to: 'audios#stream', as: :stream
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

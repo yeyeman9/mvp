@@ -11,11 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170128235709) do
+ActiveRecord::Schema.define(version: 20170129044226) do
 
   create_table "audios", force: :cascade do |t|
     t.integer  "interest_id"
-    t.string   "audio_url"
     t.string   "name"
     t.text     "description"
     t.date     "air_date"
