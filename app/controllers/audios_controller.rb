@@ -69,6 +69,6 @@ class AudiosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def audio_params
-      params.require(:audio).permit(:interest_id, :audio_url, :name, :description, :air_date, :played_count)
+      params.require(:audio).permit(:interest_id, :audio_url, :audio, :name, :description, :air_date, :played_count)
     end
 end

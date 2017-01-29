@@ -9,6 +9,8 @@ class CreateAudios < ActiveRecord::Migration
       t.integer :played_count
 
       t.timestamps null: false
+      
+      t.has_attached_file :audio
     end
   end
 end
