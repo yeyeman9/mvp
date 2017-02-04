@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170129044226) do
+ActiveRecord::Schema.define(version: 20170204204125) do
 
   create_table "audios", force: :cascade do |t|
     t.integer  "interest_id"
@@ -25,6 +25,30 @@ ActiveRecord::Schema.define(version: 20170129044226) do
     t.string   "audio_content_type"
     t.integer  "audio_file_size"
     t.datetime "audio_updated_at"
+  end
+
+  create_table "interests", force: :cascade do |t|
+    t.string   "name"
+    t.string   "imageURL"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "user_interests", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "interest_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+    t.string   "f_name"
+    t.string   "l_name"
+    t.string   "email"
+    t.string   "password"
+    t.boolean  "premium"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end

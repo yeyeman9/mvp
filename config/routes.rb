@@ -1,7 +1,13 @@
 Rails.application.routes.draw do
   
+  resources :user_interests
+  resources :users
+  resources :interests
+  
   namespace :api do
     resources :audios
+    resources :interests
+    resources :users
   end
   
   

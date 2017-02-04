@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @interest.name %>
+</p>
+
+<p>
+  <strong>String,:</strong>
+  <%= @interest.string, %>
+</p>
+
+<p>
+  <strong>Imageurl:</strong>
+  <%= @interest.imageURL %>
+</p>
+
+<p>
+  <strong>String:</strong>
+  <%= @interest.string %>
+</p>
+
+<%= link_to 'Edit', edit_interest_path(@interest) %> |
+<%= link_to 'Back', interests_path %>
