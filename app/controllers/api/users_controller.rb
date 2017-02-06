@@ -9,9 +9,13 @@ class Api::UsersController < ApplicationController
     
     @audio = []
     @user.user_interests.each do |i|
-      
+      # @audios =  Audio.where("interest_id = ?", i.interest_id)
+      # @audio_grouped =  @audios.group_by(&:air_date)
+      # @audio << @audio_grouped
       @audio << Audio.where("interest_id = ?", i.interest_id)
     end
+    
+   # @audio = @audio.group_by
     
     
     response = { :user => @user.as_json(include: :user_interests), :audios => @audio.as_json(methods: :audio) }
