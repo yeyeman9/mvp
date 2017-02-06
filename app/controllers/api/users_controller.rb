@@ -6,7 +6,30 @@ class Api::UsersController < ApplicationController
   
   def show
     @user = User.find(params[:id])
-    render :json => @user.as_json(include: :user_interests )
+    
+    @audio = []
+    @user.user_interests.each do |i|
+      
+      @audio << Audio.where("interest_id = ?", i.interest_id)
+    end
+    
+    
+    response = { :user => @user.as_json(include: :user_interests), :audios => @audio.as_json(methods: :audio) }
+ 
+    render :json => response
+    #render :json => @user.as_json(include: :user_interests)
+    
+    
+    #render :json => @audio.as_json
+  
+  end
+  
+  
+  def user_audios(user)
+    @audio = []
+    user.user_interests.each do |i|
+      @audio << Audio.where("interest_id = ?", i.interest_id)
+    end
   end
 
 end
