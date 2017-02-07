@@ -15,17 +15,21 @@ class Api::UsersController < ApplicationController
 
   end
   
-  def search_audios(user)
-   
-    interests_array = []
-   
-    user.user_interests.each do |i|
-      interests_array << i.interest_id 
+  
+  
+  private
+  
+    def search_audios(user)
+     
+      interests_array = []
+     
+      user.user_interests.each do |i|
+        interests_array << i.interest_id 
+      end
+  
+      audio_query = Audio.where(interest_id: interests_array)
+      audio_query
     end
-
-    audio_query = Audio.where(interest_id: interests_array)
-    audio_query
-  end
   
 
 end
