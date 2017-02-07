@@ -6,10 +6,13 @@ class Api::InterestsController < ApplicationController
   
   def show
     @interest = Interest.find(params[:id])
-    @audios = interest_audios(@interest)
+    render :json => @interest.as_json
     
-    response = { :interest => @interest, :audios => @audios.as_json(methods: :audio) }
-    render :json => response
+    #Below is the code needed to add the audio files within the interest object
+    # @audios = interest_audios(@interest)
+    
+    # response = { :interest => @interest, :audios => @audios.as_json(methods: :audio) }
+    # render :json => response
     
   end
   
