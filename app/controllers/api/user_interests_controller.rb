@@ -8,7 +8,6 @@ class Api::UserInterestsController < ApplicationController
   
   # POST /user_interests
   # POST /user_interests.json
-  
   def create
     @user_interest = UserInterest.new(user_interest_params)
 
