@@ -1,4 +1,5 @@
 class Api::UsersController < ApplicationController
+  
   skip_before_filter :verify_authenticity_token  #REMOVE THIS AFTER WE HAVE AUTHENTICATION
   
   def index
