@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170205230358) do
+ActiveRecord::Schema.define(version: 20170208034438) do
 
   create_table "audios", force: :cascade do |t|
     t.integer  "interest_id"
@@ -47,10 +47,10 @@ ActiveRecord::Schema.define(version: 20170205230358) do
     t.string   "f_name"
     t.string   "l_name"
     t.string   "email"
-    t.string   "password"
+    t.string   "password_digest"
     t.boolean  "premium"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
 end
