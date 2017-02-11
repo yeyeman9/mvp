@@ -2,6 +2,8 @@ class Api::UserInterestsController < ApplicationController
   
   skip_before_filter :verify_authenticity_token   #REMOVE THIS AFTER WE HAVE AUTHENTICATION
   
+  before_filter :delete_old_interests
+  
   def index
     render :json => UserInterest.all
   end
@@ -13,23 +15,21 @@ class Api::UserInterestsController < ApplicationController
     if user_interest_params
       
       @user_id = user_interest_params[:user_id]
+
       count = 1
-      user_interest_params[:interest_id].each do |interest|
-       #TODO: Save all the current user's array, compare with the new arrays. Whichever are in the current interest
-       # but aren't in the new interest, delete. 
-       
-       #TODO: Check if the interest already exists, if it doesn't create the new one
+      interests_to_add = does_interest_exist(user_interest_params) #only add interests that don't exist yet
+      
+      
+      interests_to_add.each do |interest|
         @user_interest = UserInterest.new(user_id: @user_id, interest_id: interest)
         
         if @user_interest.save
-          if count == user_interest_params[:interest_id].length #show success only for the last one
-          render json: { 
+          if count == interests_to_add.length #show success only for the last one
+            render json: { 
               status: 200,
               message: "Successfully added user interests",
               user_interests: @user_interest
             }.to_json
-          else
-            
           end
         else
           render json: {
@@ -71,8 +71,58 @@ class Api::UserInterestsController < ApplicationController
       params.permit(:user_id, :interest_id => [])
    end
    
-   def does_interest_exist
+   def does_interest_exist(user_interests)
+     
+     interests = []
+     
+     user_interests[:interest_id].each do |i|
+     
+      if UserInterest.where("user_id = ? AND interest_id = ?", @user_id, i).exists?
+        #do nothing
+      else
+          interests << i   #add to interests list if interest doesn't exist
+      end
+     
+     end
+
+    interests
      
    end
+   
+   def delete_old_interests
+    if user_interest_params
+      user_id = user_interest_params[:user_id]
+      new_interests = user_interest_params[:interest_id]
+      interests_to_delete = []
+      current_interests = []
+      
+      UserInterest.where("user_id = ?", user_id).each do |user_interests|
+          current_interests << user_interests.interest_id.to_s
+      end
+      
+      current_interests.each do |i|
+        if new_interests.include? i
+    
+        else
+          interests_to_delete << i #assign interest to be deleted if it isn't part of the new interests to be added
+        end
+        
+      end
+      
+      if !interests_to_delete.empty?
+        interests_to_delete.each do |interest|
+          an_interest = UserInterest.where("user_id = ? AND interest_id = ?", user_id, interest)
+          id = an_interest.first.id
+          @delete_interest = UserInterest.find(id)
+          @delete_interest.destroy
+          if @delete_interest.save
+            
+          else
+            
+          end
+        end
+      end
+    end
   
+   end
 end
