@@ -1,8 +1,6 @@
-class Api::UserInterestsController < ApplicationController
+class Api::UserInterestsController < Api::ApiController
   
-  skip_before_filter :verify_authenticity_token   #TODO: REMOVE THIS AFTER WE HAVE AUTHENTICATION
-  
-  before_filter :delete_old_interests #delete interests that aren't going to be added
+  before_filter :delete_old_interests, only: [:create] #delete interests that aren't going to be added
   
   def index
     render :json => UserInterest.all

@@ -1,6 +1,4 @@
-class Api::UsersController < ApplicationController
-  
-  skip_before_filter :verify_authenticity_token  #TODO: REMOVE THIS AFTER WE HAVE AUTHENTICATION
+class Api::UsersController < Api::ApiController
   
   def index
     render :json => User.all.as_json(include: :user_interests)
