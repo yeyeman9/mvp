@@ -1,8 +1,8 @@
 class Api::UserInterestsController < ApplicationController
   
-  skip_before_filter :verify_authenticity_token   #REMOVE THIS AFTER WE HAVE AUTHENTICATION
+  skip_before_filter :verify_authenticity_token   #TODO: REMOVE THIS AFTER WE HAVE AUTHENTICATION
   
-  before_filter :delete_old_interests
+  before_filter :delete_old_interests #delete interests that aren't going to be added
   
   def index
     render :json => UserInterest.all
@@ -18,31 +18,35 @@ class Api::UserInterestsController < ApplicationController
 
       count = 1
       interests_to_add = does_interest_exist(user_interest_params) #only add interests that don't exist yet
-      
-      
-      interests_to_add.each do |interest|
-        @user_interest = UserInterest.new(user_id: @user_id, interest_id: interest)
-        
-        if @user_interest.save
-          if count == interests_to_add.length #show success only for the last one
-            render json: { 
-              status: 200,
-              message: "Successfully added user interests",
-              user_interests: @user_interest
+    
+      if interests_to_add.length >= 1 #only run this if there are interests to add
+        interests_to_add.each do |interest|
+          @user_interest = UserInterest.new(user_id: @user_id, interest_id: interest)
+          
+          if @user_interest.save
+            if count == interests_to_add.length #show success only for the last one
+              render json: { 
+                status: 200,
+                message: "Successfully added user interests",
+                user_interests: @user_interest
+              }.to_json
+            end
+          else
+            render json: {
+              status: 500,
+              message: "Couldn't save user interests",
+              errors: @user_interest.errors
             }.to_json
           end
-        else
-          render json: {
-            status: 500,
-            errors: @user_interest.errors
-          }.to_json
+          count += 1
         end
-        
-        count += 1
+      else #if there are no interests to add, state so.
+         render json: {
+              status: 200,
+              message: "No interests to add"
+            }.to_json
       end
-    
     end
-
   end
   
   # DELETE /user_interests/1
@@ -60,6 +64,7 @@ class Api::UserInterestsController < ApplicationController
       else
         render json: {
           status: 500,
+          message: "Couldn't delete user interest.",
           errors: @user_interest.errors
          }.to_json
     end
@@ -84,7 +89,7 @@ class Api::UserInterestsController < ApplicationController
       end
      
      end
-
+    
     interests
      
    end
@@ -102,7 +107,7 @@ class Api::UserInterestsController < ApplicationController
       
       current_interests.each do |i|
         if new_interests.include? i
-    
+          #do nothing
         else
           interests_to_delete << i #assign interest to be deleted if it isn't part of the new interests to be added
         end
@@ -115,11 +120,18 @@ class Api::UserInterestsController < ApplicationController
           id = an_interest.first.id
           @delete_interest = UserInterest.find(id)
           @delete_interest.destroy
+          
           if @delete_interest.save
-            
+            #do nothing
           else
+            render json: {
+            status: 500,
+            message: "Couldn't delete user interest.",
+            errors: @user_interest.errors
+           }.to_json
             
           end
+          
         end
       end
     end

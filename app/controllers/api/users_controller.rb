@@ -1,6 +1,6 @@
 class Api::UsersController < ApplicationController
   
-  skip_before_filter :verify_authenticity_token  #REMOVE THIS AFTER WE HAVE AUTHENTICATION
+  skip_before_filter :verify_authenticity_token  #TODO: REMOVE THIS AFTER WE HAVE AUTHENTICATION
   
   def index
     render :json => User.all.as_json(include: :user_interests)
@@ -10,8 +10,8 @@ class Api::UsersController < ApplicationController
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
-    @audio_query = search_audios(@user)
-    @audio = @audio_query.group_by(&:air_date)
+    @audio_query = search_audios(@user) #get all audios for the user, based on his interests
+    @audio = @audio_query.group_by(&:air_date) #group all audios by date
   
     response = { :user => @user.as_json(include: :user_interests), :audios => @audio.as_json(methods: :audio) }
  
@@ -32,6 +32,7 @@ class Api::UsersController < ApplicationController
       else
         render json: {
           status: 500,
+          message: "Error creating user",
           errors: @user.errors
          }.to_json
       end
