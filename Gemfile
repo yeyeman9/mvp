@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 
 #manually added by JR
 gem 'paperclip', '~> 4.3', '>= 4.3.6'
-
+gem 'jwt'
+gem 'simple_command'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.5'
 # Use sqlite3 as the database for Active Record

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :interests
     resources :users
     resources :user_interests
+    post 'authenticate', to: 'authentication#authenticate'
   end
   
   
