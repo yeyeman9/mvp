@@ -9,9 +9,8 @@ class Api::UserInterestsController < Api::ApiController
   # POST /user_interests
   # POST /user_interests.json
   def create
-    
-    if user_interest_params
-      
+    if user_interest_params && @current_user.id == user_interest_params[:user_id].to_i #only create them if the current user = the parameter user
+  
       @user_id = user_interest_params[:user_id]
 
       count = 1
@@ -44,6 +43,11 @@ class Api::UserInterestsController < Api::ApiController
               message: "No interests to add"
             }.to_json
       end
+    else
+      render json: {
+              status: 400,
+              message: "Invalid authentication"
+            }.to_json
     end
   end
   

@@ -8,12 +8,19 @@ class Api::UsersController < Api::ApiController
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
-    @audio_query = search_audios(@user) #get all audios for the user, based on his interests
-    @audio = @audio_query.group_by(&:air_date) #group all audios by date
-  
-    response = { :user => @user.as_json(include: :user_interests), :audios => @audio.as_json(methods: :audio) }
- 
-    render :json => response
+    if @current_user.id == @user.id #verify if current user is the authenticated user
+      @audio_query = search_audios(@user) #get all audios for the user, based on his interests
+      @audio = @audio_query.group_by(&:air_date) #group all audios by date
+    
+      response = { :user => @user.as_json(include: :user_interests), :audios => @audio.as_json(methods: :audio) }
+   
+      render :json => response
+    else
+       render json: {
+          status: 400,
+          message: "Invalid authentication"
+         }.to_json
+    end
 
   end
   
