@@ -1,5 +1,7 @@
 class Api::UsersController < Api::ApiController
   
+  skip_before_action :authenticate_request, :only => [:create]
+  
   def index
     render :json => User.all.as_json(include: :user_interests)
   end
