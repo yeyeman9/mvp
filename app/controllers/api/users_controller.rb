@@ -31,10 +31,12 @@ class Api::UsersController < Api::ApiController
   def create
     @user = User.new(user_params)
       if @user.save
+        token = authenticate(@user.email, @user.password)
         render json: {
           status: 200,
           message: "Successfully created user",
-          user_interests: @user
+          user: @user,
+          token: token
         }.to_json
       else
         render json: {
@@ -62,6 +64,16 @@ class Api::UsersController < Api::ApiController
     
     def user_params
       params.permit(:f_name, :l_name, :email, :password, :premium)
+    end
+    
+    def authenticate(email, password)
+       command = AuthenticateUser.call(email, password)
+       
+       if command.success?
+         command.result
+       else
+         command.errors
+       end
     end
 
 end
