@@ -3,7 +3,7 @@ class Api::AuthenticationController < ApplicationController
   
   def authenticate
      email = params[:email]
-     command = AuthenticateUser.call(params[:email], params[:password])
+     command = AuthenticateUser.call(email, params[:password])
      
      if command.success?
        render json: { 
